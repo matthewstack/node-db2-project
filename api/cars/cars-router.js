@@ -1,7 +1,12 @@
 // DO YOUR MAGIC
 const router = require("express").Router();
 const Cars = require("./cars-model");
-const { checkCarId } = require("../cars/cars-middleware");
+const {
+  checkCarId,
+  checkCarPayload,
+  checkVinNumberValid,
+  checkVinNumberUnique,
+} = require("../cars/cars-middleware");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -15,6 +20,22 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", checkCarId, (req, res, next) => {
   res.json(req.car);
 });
+
+router.post(
+  "/",
+  checkCarPayload,
+  checkVinNumberValid,
+  checkVinNumberUnique,
+  (req, res, next) => {
+    Cars.create(req.body)
+      .then((car) => {
+        res.json(car);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+);
 
 router.use((err, req, res, next) => {
   res.status(err.status || 500).json({
