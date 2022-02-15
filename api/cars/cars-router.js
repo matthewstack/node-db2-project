@@ -23,6 +23,7 @@ router.get("/:id", checkCarId, (req, res, next) => {
 
 router.post(
   "/",
+  checkCarId,
   checkCarPayload,
   checkVinNumberValid,
   checkVinNumberUnique,
@@ -36,6 +37,33 @@ router.post(
       });
   }
 );
+
+router.put(
+  "/:id",
+  checkCarPayload,
+  checkVinNumberValid,
+  checkVinNumberUnique,
+  (req, res, next) => {
+    Cars.updateById(req.params.id, req.body)
+      .then((car) => {
+        res.json(car);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+);
+
+router.delete("/:id", checkCarId, (req, res, next) => {
+  const { id } = req.params;
+  Cars.deleteById(id)
+    .then(() => {
+      return res.json(req.car);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
 
 router.use((err, req, res, next) => {
   res.status(err.status || 500).json({

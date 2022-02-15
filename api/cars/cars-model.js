@@ -19,8 +19,23 @@ const create = (car) => {
     });
 };
 
+const updateById = (id, car) => {
+  // DO YOUR MAGIC
+  return db("cars")
+    .where({ id })
+    .update(car)
+    .then((rows) => {
+      return getById(id);
+    });
+};
+
+const deleteById = (id) => {
+  return db("cars").where("id", id).del();
+};
+
 module.exports = {
   getAll,
   getById,
   create,
+  deleteById,
 };
