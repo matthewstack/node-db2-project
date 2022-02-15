@@ -23,7 +23,6 @@ router.get("/:id", checkCarId, (req, res, next) => {
 
 router.post(
   "/",
-  checkCarId,
   checkCarPayload,
   checkVinNumberValid,
   checkVinNumberUnique,
@@ -40,6 +39,8 @@ router.post(
 
 router.put(
   "/:id",
+  checkCarId,
+
   checkCarPayload,
   checkVinNumberValid,
   checkVinNumberUnique,
